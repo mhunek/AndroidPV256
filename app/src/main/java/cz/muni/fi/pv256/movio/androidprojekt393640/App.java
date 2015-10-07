@@ -1,5 +1,9 @@
 package cz.muni.fi.pv256.movio.androidprojekt393640;
 
+import android.app.Application;
+import android.os.Build;
+import android.os.StrictMode;
+
 /**
  * Created by mhunek on 21/9/2015.
  */

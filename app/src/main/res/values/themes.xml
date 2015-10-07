@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MainAppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/deep_purple_500</item>
+        <item name="colorPrimaryDark">@color/deep_purple_800</item>
+        <item name="colorAccent">@color/light_green_100</item>
+    </style>
+
+    <style name="Theme.AlternativeTheme" parent="Theme.MainAppTheme">
+        <item name="colorPrimary">@color/light_green_500</item>
+        <item name="colorPrimaryDark">@color/light_green_800</item>
+        <item name="colorAccent">@color/deep_purple_100</item>
+    </style>
+</resources>
