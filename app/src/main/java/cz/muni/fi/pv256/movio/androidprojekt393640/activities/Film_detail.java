@@ -1,23 +1,27 @@
-package cz.muni.fi.pv256.movio.androidprojekt393640;
+package cz.muni.fi.pv256.movio.androidprojekt393640.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
-public class MainActivity extends Activity {
+import cz.muni.fi.pv256.movio.androidprojekt393640.R;
+import cz.muni.fi.pv256.movio.androidprojekt393640.models.Film;
 
+public class Film_detail extends Activity {
+
+    Film filmData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+        setContentView(R.layout.activity_film_detail);
+        Intent intent = getIntent();
+        filmData = (Film) intent.getSerializableExtra("SelectedFilm");
+        TextView  mFirstNameHeader = (TextView) findViewById(R.id.film_detail_text);
+        mFirstNameHeader.setText(filmData.getTitle());
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override
