@@ -18,7 +18,7 @@ public class Film_detail extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_film_detail);
         Intent intent = getIntent();
-        filmData = (Film) intent.getSerializableExtra("SelectedFilm");
+        filmData = (Film) intent.getParcelableExtra("SelectedFilm");
         TextView  mFirstNameHeader = (TextView) findViewById(R.id.film_detail_text);
         mFirstNameHeader.setText(filmData.getTitle());
 

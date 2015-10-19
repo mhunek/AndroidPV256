@@ -2,7 +2,9 @@ package cz.muni.fi.pv256.movio.androidprojekt393640.activities;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.widget.AdapterView.OnItemClickListener;
 import android.view.Menu;
@@ -26,11 +28,15 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        if(isOnline()) {
+            Toast.makeText(getApplicationContext(),"Connected",Toast.LENGTH_LONG);
+        }else {
+            Toast.makeText(getApplicationContext(),"Not connected",Toast.LENGTH_LONG);
+        }
         gv=(GridView) findViewById(android.R.id.list);
         film_adapter = new FilmAdapter(this, R.layout.film_list , getTestData());
         gv.setAdapter(film_adapter);
-       gv.setOnItemClickListener(new OnItemClickListener() {
+        gv.setOnItemClickListener(new OnItemClickListener() {
 
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -65,10 +71,23 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean isOnline()
+    {
+        try
+        {
+            ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
     private ArrayList<Film> getTestData() {
         ArrayList<Film> films = new ArrayList<>(100);
         for (int i =0; i < 100; i ++) {
-            Film f = new Film(i+1000, "cover" + Integer.toString(i+500), "Title" + Integer.toString(i),i,i%5);
+            Film f = new Film(i,i+1000, "cover" + Integer.toString(i+500), "Title" + Integer.toString(i),i%5);
             films.add(f);
 
         }
