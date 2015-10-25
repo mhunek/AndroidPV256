@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,7 +21,7 @@ import cz.muni.fi.pv256.movio.androidprojekt393640.models.Film;
 /**
  * Created by mhunek on 12/10/2015.
  */
-public class FilmAdapter extends ArrayAdapter<Film> {
+public class FilmAdapter extends ArrayAdapter<Film> implements StickyGridHeadersBaseAdapter {
 
     private ArrayList<Film> filmData;
     private Random r = new Random();
@@ -47,9 +49,31 @@ public class FilmAdapter extends ArrayAdapter<Film> {
         }
         ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.view.setText(filmData.get(position).getTitle());
-        holder.im_view.setImageResource(R.mipmap.test_images);
         holder.rating_bar.setRating(filmData.get(position).getRating());
+        holder.im_view.setImageResource(R.mipmap.test_images);
         return convertView;
+    }
+
+    @Override
+    public int getCountForHeader(int i) {
+        return 50;
+    }
+
+    @Override
+    public int getNumHeaders() {
+        return 2;
+    }
+
+    @Override
+    public View getHeaderView(int i, View view, ViewGroup viewGroup) {
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.grid_header, viewGroup, false);
+
+        }
+       TextView headerView = (TextView) view.findViewById(R.id.gridHeadertext);
+        headerView.setText("text");
+        return view;
     }
 
     static class ViewHolder {

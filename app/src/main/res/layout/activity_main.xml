@@ -1,31 +1,40 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
                 tools:context="cz.muni.fi.pv256.movio.androidprojekt393640.activities.MainActivity"
                 android:id="@+id/MainView">
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:text=" Top text" />
-    <GridView
-        android:layout_below="@+id/textView1"
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="?attr/colorAccent"
-        android:numColumns="3"
-        >
 
-    </GridView>
-    <ViewStub
-        android:id="@android:id/empty"
+    <FrameLayout
+        android:id="@+id/OneFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout="@layout/empty_layout"/>
+        android:background="#37ff39">
+    </FrameLayout>
+    <LinearLayout
+        android:id="@+id/MultipleFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <FrameLayout
+            android:id="@+id/MultipleFirst"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:background="#37ff39"
+            android:layout_width="0dp">
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/MultipleSecond"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:background="#37ff39"
+            android:layout_width="0dp">
+        </FrameLayout>
 
-</RelativeLayout>
+
+    </LinearLayout>
+    <!-- flash bar content -->
+
+
+</LinearLayout>
