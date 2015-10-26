@@ -3,3 +3,31 @@
 /build/intermediates
 /build/tmp
 /build/outputs/logs
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# ignore Gradle files
+.gradle/
+build/
+
+# local configuration file (sdk path, etc)
+local.properties
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+out/

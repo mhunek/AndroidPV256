@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "cz.muni.fi.pv256.movio.androidprojekt393640"
+        applicationId "cz.muni.fi.pv256.movio.393640"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1

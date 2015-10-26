@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,7 +39,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if(savedInstanceState== null) {
-            if (isOnline()) {
+            if (isConnected(getApplicationContext())) {
                 Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG);
             } else {
                 Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_LONG);
@@ -93,17 +94,19 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean isOnline()
-    {
-        try
-        {
-            ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            return cm.getActiveNetworkInfo().isConnectedOrConnecting();
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+    public static NetworkInfo getNetworkInfo(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo();
+    }
+
+    /**
+     * Check if there is any connectivity
+     * @param context
+     * @return
+     */
+    public static boolean isConnected(Context context){
+        NetworkInfo info = getNetworkInfo(context);
+        return (info != null && info.isConnected());
     }
 
     private ArrayList<Film> getTestData() {
