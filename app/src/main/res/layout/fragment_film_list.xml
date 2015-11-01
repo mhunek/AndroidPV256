@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="cz.muni.fi.pv256.movio.androidprojekt393640.activities.FilmListFragment">
+             tools:context="cz.muni.fi.pv256.movio.uco393640.activities.FilmListFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView

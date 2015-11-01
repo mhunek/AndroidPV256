@@ -1,14 +1,13 @@
-package cz.muni.fi.pv256.movio.androidprojekt393640.activities;
+package cz.muni.fi.pv256.movio.uco393640.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import cz.muni.fi.pv256.movio.androidprojekt393640.R;
-import cz.muni.fi.pv256.movio.androidprojekt393640.models.Film;
+import cz.muni.fi.pv256.movio.uco393640.R;
+import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
 public class Film_detail extends Activity {
 

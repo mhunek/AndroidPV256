@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Androidprojekt393640</string>
+    <string name="film_api_key">ba971a5e76768b31a89048af95e40ec4</string>
+    <string name="hello_world">Ahjoj</string>
+    <string name="action_settings">Akčni nastaveni :D</string>
+    <string name="title_activity_main">Hlavni activita</string>
+    <string name="title_activity_film_detail">detail filmu</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Zdraveni</string>
+</resources>

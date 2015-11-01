@@ -7,7 +7,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.MainAppTheme" >
+        android:theme="@style/Theme.AlternativeTheme" >
         <activity
             android:name="cz.muni.fi.pv256.movio.uco393640.activities.MainActivity"
             android:label="@string/app_name" >

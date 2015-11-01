@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Androidprojekt393640</string>
+    <string name="film_api_key">ba971a5e76768b31a89048af95e40ec4</string>
+    <string name="hello_world">Hello world!  v japonštině</string>
+    <string name="action_settings">Settings  v japonštině</string>
+    <string name="title_activity_main">MainActivity  v japonštině</string>
+    <string name="title_activity_film_detail">Film detail v japonštině</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Zdraveni v japonštině</string>
+</resources>

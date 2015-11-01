@@ -1,9 +1,7 @@
-package cz.muni.fi.pv256.movio.androidprojekt393640.models;
+package cz.muni.fi.pv256.movio.uco393640.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.io.Serializable;
 
 /**
  * Created by mhunek on 12/10/2015.

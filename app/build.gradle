@@ -1,22 +1,70 @@
 apply plugin: 'com.android.application'
 
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 0
+def versionBuild = 0
+
+
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
 
+    //tímto způsobem snadno rozlišíte mezi jednotlivými buildy a verzemi
+    applicationVariants.all { variant -> // .all stejně jako each prochází všechny prvky kolekce, ale aplikuje se i v případě, že v ní přibudou nové prvky
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    "$project.name-$variant.name-$variant.versionName-${variant.versionCode}.apk")
+        }
+    }
+
     defaultConfig {
-        applicationId "cz.muni.fi.pv256.movio.393640"
+        applicationId "cz.muni.fi.pv256.movio.uco393640"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        resConfigs "cs", "ja", "en" //nechat resources jen pro vyjmenované jazyky
     }
+
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        }
+        debug {
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-project.txt'), 'proguard-rules.pro'
+            versionNameSuffix  ":${defaultConfig.versionCode}"
         }
     }
+    productFlavors {
+        primary {
+            buildConfigField 'String', 'THEME', '"PRIMARY"'
+            buildConfigField 'boolean', 'LOGING', "true"
+            applicationId 'cz.muni.fi.pv256.movio.uco393640'
+        } //bude naše default flavor
+        secundary {
+            buildConfigField 'String', 'THEME', '"SECONDARY"'
+            buildConfigField 'boolean', 'LOGING', "false"
+            applicationId "cz.muni.fi.pv256.movio.uco393640.secondary" //úplně jiný package name
+        }
+    }
+
 }
 
 dependencies {

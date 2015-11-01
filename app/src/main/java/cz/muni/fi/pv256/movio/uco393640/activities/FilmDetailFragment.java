@@ -1,54 +1,47 @@
-package cz.muni.fi.pv256.movio.androidprojekt393640.activities;
+package cz.muni.fi.pv256.movio.uco393640.activities;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
-
-import java.util.ArrayList;
-
-import cz.muni.fi.pv256.movio.androidprojekt393640.R;
-import cz.muni.fi.pv256.movio.androidprojekt393640.adapters.FilmAdapter;
-import cz.muni.fi.pv256.movio.androidprojekt393640.models.Film;
+import cz.muni.fi.pv256.movio.uco393640.R;
+import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FilmListFragment.OnFragmentInteractionListener} interface
+ * {@link FilmDetailFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FilmListFragment#newInstance} factory method to
+ * Use the {@link FilmDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FilmListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class FilmDetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String FILM_LIST = "filmList";
+    private static final String FILM_PARAM = "film";
 
-
-    private FilmAdapter mAdapter;    // GridView adapter
-    private ArrayList<Film> films;
+    // TODO: Rename and change types of parameters
+    private Film film;
 
     private OnFragmentInteractionListener mListener;
 
-    public static FilmListFragment newInstance(ArrayList<Film> films) {
-        FilmListFragment fragment = new FilmListFragment();
+
+    // TODO: Rename and change types and number of parameters
+    public static FilmDetailFragment newInstance(Film film) {
+        FilmDetailFragment fragment = new FilmDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(FILM_LIST, films);
+        args.putParcelable(FILM_PARAM, film);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public FilmListFragment() {
+    public FilmDetailFragment() {
         // Required empty public constructor
     }
 
@@ -56,7 +49,7 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            films = getArguments().getParcelableArrayList(FILM_LIST);
+            film = getArguments().getParcelable(FILM_PARAM);
         }
     }
 
@@ -64,14 +57,18 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.fragment_film_list, container, false);
+        View frag = inflater.inflate(R.layout.fragment_film_detail, container, false);
+        TextView mFirstNameHeader = (TextView) frag.findViewById(R.id.film_detail_text);
+        mFirstNameHeader.setText(film.getTitle());
+        return frag;
 
-        mAdapter =new FilmAdapter(getActivity(), R.layout.film_list , films);
-        StickyGridHeadersGridView gridView = (StickyGridHeadersGridView) fragmentView.findViewById(android.R.id.list);
-        gridView.setAdapter(mAdapter);
-        gridView.setOnItemClickListener(this);
+    }
 
-        return fragmentView;
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
     @Override
@@ -92,19 +89,12 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
-        // retrieve the GridView item
-        Film item = films.get(position);
-        mListener.onFragmentInteraction(position);
-        // do something
-        Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_SHORT).show();
+    public void onSaveInstanceState(Bundle outState) {
+        // Make sure to call the super method so that the states of our views are saved
+        super.onSaveInstanceState(outState);
+        // Save our own state now
+        outState.putParcelable(FILM_PARAM, film);
     }
-
-
-
-
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -117,7 +107,7 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(int index);
+        public void onFragmentInteraction(Uri uri);
     }
 
 }

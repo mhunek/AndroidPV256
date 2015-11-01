@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio.androidprojekt393640;
+package cz.muni.fi.pv256.movio.uco393640;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

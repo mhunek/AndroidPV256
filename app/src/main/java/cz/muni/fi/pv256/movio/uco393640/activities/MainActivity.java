@@ -1,9 +1,6 @@
-package cz.muni.fi.pv256.movio.androidprojekt393640.activities;
+package cz.muni.fi.pv256.movio.uco393640.activities;
 
-import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,20 +10,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.widget.AdapterView.OnItemClickListener;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import cz.muni.fi.pv256.movio.androidprojekt393640.R;
-import cz.muni.fi.pv256.movio.androidprojekt393640.adapters.FilmAdapter;
-import cz.muni.fi.pv256.movio.androidprojekt393640.models.Film;
+import cz.muni.fi.pv256.movio.uco393640.R;
+import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
+import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
 public class MainActivity extends FragmentActivity  implements FilmListFragment.OnFragmentInteractionListener, FilmDetailFragment.OnFragmentInteractionListener{
 

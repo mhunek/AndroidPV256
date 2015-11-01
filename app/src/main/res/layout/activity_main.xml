@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                tools:context="cz.muni.fi.pv256.movio.androidprojekt393640.activities.MainActivity"
+                tools:context="cz.muni.fi.pv256.movio.uco393640.activities.MainActivity"
                 android:id="@+id/MainView">
 
     <FrameLayout

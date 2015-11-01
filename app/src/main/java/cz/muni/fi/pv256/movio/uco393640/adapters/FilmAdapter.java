@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio.androidprojekt393640.adapters;
+package cz.muni.fi.pv256.movio.uco393640.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,8 +15,9 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 import java.util.ArrayList;
 import java.util.Random;
 
-import cz.muni.fi.pv256.movio.androidprojekt393640.R;
-import cz.muni.fi.pv256.movio.androidprojekt393640.models.Film;
+import cz.muni.fi.pv256.movio.uco393640.BuildConfig;
+import cz.muni.fi.pv256.movio.uco393640.R;
+import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
 /**
  * Created by mhunek on 12/10/2015.
@@ -42,10 +43,14 @@ public class FilmAdapter extends ArrayAdapter<Film> implements StickyGridHeaders
             holder.im_view = (ImageView) convertView.findViewById(R.id.item_image);
             holder.rating_bar= (RatingBar)convertView.findViewById(R.id.item_rating);
             convertView.setTag(holder);
-            Log.i("","inflate radku "+ position);
+            if (BuildConfig.LOGING){
+                Log.i("","inflate radku "+ position);
+            }
 
         }else {
-            Log.i("","recyklace radku "+ position);
+            if (BuildConfig.LOGING) {
+                Log.i("", "recyklace radku " + position);
+            }
         }
         ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.view.setText(filmData.get(position).getTitle());
