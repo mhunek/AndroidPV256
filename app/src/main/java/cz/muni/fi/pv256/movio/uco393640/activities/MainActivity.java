@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import cz.muni.fi.pv256.movio.uco393640.BuildConfig;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
@@ -30,6 +31,12 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TODO : string values
+        if(BuildConfig.THEME.equals("PRIMARY")) {
+            this.setTheme(R.style.Theme_MainAppTheme);
+        }else {
+            this.setTheme(R.style.Theme_AlternativeTheme);
+        }
         setContentView(R.layout.activity_main);
         if(savedInstanceState== null) {
             if (isConnected(getApplicationContext())) {
