@@ -1,6 +1,7 @@
 package cz.muni.fi.pv256.movio.uco393640.activities;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +13,10 @@ import android.widget.Toast;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import cz.muni.fi.pv256.movio.uco393640.DataSaver;
+import cz.muni.fi.pv256.movio.uco393640.HttpWorker;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
@@ -30,7 +34,7 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String FILM_LIST = "filmList";
-
+    private AsyncListViewLoader myTask;
 
     private FilmAdapter mAdapter;    // GridView adapter
     private ArrayList<Film> films;
@@ -55,6 +59,9 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
         if (getArguments() != null) {
             films = getArguments().getParcelableArrayList(FILM_LIST);
         }
+        myTask = new AsyncListViewLoader();
+
+        myTask.execute(getString(R.string.film_api_key));
     }
 
     @Override
@@ -115,6 +122,28 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(int index);
+    }
+
+    private class AsyncListViewLoader extends AsyncTask<String, Void, Void> {
+        List<Film> group1;
+        List<Film> group2;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            HttpWorker hw =new HttpWorker() ;
+            group1 = hw.getFilms(params[0]);
+            group2 =hw.getFilms2(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void nul) {
+            DataSaver.group1 = group1;
+            DataSaver.group2=group2;
+            if(mAdapter != null) {
+                mAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
 }

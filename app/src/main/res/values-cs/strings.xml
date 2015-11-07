@@ -5,6 +5,7 @@
     <string name="action_settings">Akčni nastaveni :D</string>
     <string name="title_activity_main">Hlavni activita</string>
     <string name="title_activity_film_detail">detail filmu</string>
+    <string name="base_url">http://image.tmdb.org/t/p/</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Zdraveni</string>

@@ -8,7 +8,7 @@
         android:id="@+id/item_image"
         android:contentDescription="list_item_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"

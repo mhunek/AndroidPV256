@@ -5,6 +5,7 @@
     <string name="action_settings">Settings  v japonštině</string>
     <string name="title_activity_main">MainActivity  v japonštině</string>
     <string name="title_activity_film_detail">Film detail v japonštině</string>
+    <string name="base_url">http://image.tmdb.org/t/p/</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Zdraveni v japonštině</string>

@@ -7,8 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import cz.muni.fi.pv256.movio.uco393640.DataSaver;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
@@ -56,8 +60,20 @@ public class FilmDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View frag = inflater.inflate(R.layout.fragment_film_detail, container, false);
+        if(film.getId()== -1) {
+//Eempty film def picture etc
+        }else {
+        }
+//film comes fil fragment iwth data
+        ImageView backgroundIMg = (ImageView) frag.findViewById(R.id.imageViewBacgroundImg);
+        ImageView imageDetail = (ImageView) frag.findViewById(R.id.imageViewImageDetail);
+        Picasso.with(getActivity().getApplicationContext()).load(getResources().getText(R.string.base_url) +"original/"+ film.getBackgroundImg()).placeholder(R.mipmap.test_images) // optional
+                .into(backgroundIMg);
+        Picasso.with(getActivity().getApplicationContext()).load(getResources().getText(R.string.base_url) +"original/"+ film.getCoverPath()).placeholder(R.mipmap.test_images) // optional
+                .into(imageDetail);
         TextView mFirstNameHeader = (TextView) frag.findViewById(R.id.film_detail_text);
         mFirstNameHeader.setText(film.getTitle());
         return frag;

@@ -16,8 +16,10 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.muni.fi.pv256.movio.uco393640.BuildConfig;
+import cz.muni.fi.pv256.movio.uco393640.DataSaver;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
@@ -27,6 +29,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
     private FilmAdapter film_adapter;
     private GridView gv;
     private boolean isTablet = false;
+    private List<Film> data = new ArrayList<Film>(50);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,11 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
         }
         setContentView(R.layout.activity_main);
         if(savedInstanceState== null) {
+            data = getTestData();
+            Film sendedFilm = new Film(-1,"","","",0.0f,"");
+            if(data.size()>0) {
+                sendedFilm = data.get(0);
+            }
             if (isConnected(getApplicationContext())) {
                 Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG);
             } else {
@@ -47,7 +55,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
             isTablet = isTablet(getApplicationContext());
             if (isTablet) {
                 Fragment fragment = FilmListFragment.newInstance(getTestData());
-                Fragment fragment2 = FilmDetailFragment.newInstance(getTestData().get(0));
+                Fragment fragment2 = FilmDetailFragment.newInstance(sendedFilm);
                 // Použijeme getSupportFragmentManager, abychom byli kompatibilní s API<11
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -112,7 +120,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
     private ArrayList<Film> getTestData() {
         ArrayList<Film> films = new ArrayList<>(100);
         for (int i =0; i < 100; i ++) {
-            Film f = new Film(i,i+1000, "cover" + Integer.toString(i+500), "Title" + Integer.toString(i),i%5);
+            Film f = new Film(i,Integer.toString(i+1000), "cover" + Integer.toString(i+500), "Title" + Integer.toString(i),i%5,"");
             films.add(f);
 
         }
@@ -125,7 +133,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
     public void onFragmentInteraction(int index) {
 //for firts
         if (isTablet) {
-            Fragment fragment2 = FilmDetailFragment.newInstance(getTestData().get(index));
+            Fragment fragment2 = FilmDetailFragment.newInstance(DataSaver.getData().get(index));
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             // R.id.fragment_container je id nějaké ViewGroup, která existuje v aktuálním layoutu.
@@ -135,7 +143,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
             // Na konci nesmíme zapomenout transakci commitnout.
             fragmentTransaction.commit();
         }else {
-            Fragment fragment2 = FilmDetailFragment.newInstance(getTestData().get(index));
+            Fragment fragment2 = FilmDetailFragment.newInstance(DataSaver.getData().get(index));
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             // R.id.fragment_container je id nějaké ViewGroup, která existuje v aktuálním layoutu.

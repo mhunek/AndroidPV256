@@ -2,44 +2,59 @@ package cz.muni.fi.pv256.movio.uco393640.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by mhunek on 12/10/2015.
  */
 public class Film implements Parcelable {
-    private long releaseDate;
+    @SerializedName("release_date")
+    private String releaseDate;
+    @SerializedName("poster_path")
     private String coverPath;
+    @SerializedName("original_title")
     private String title;
+    @SerializedName("id")
     private long id;
+    @SerializedName("vote_average")
     private float rating;
+    @SerializedName("backdrop_path")
+    private String backgroundImg;
 
-    public Film ( long id, long releaseDate, String coverPath ,String title, float rating)  {
+    public Film() {
+
+    }
+
+    public Film ( long id, String releaseDate, String coverPath ,String title, float rating,String backgroundImg)  {
         this.releaseDate = releaseDate;
         this.coverPath = coverPath;
         this.title = title;
         this.setId(id);
         this.setRating(rating);
+        this.backgroundImg = backgroundImg;
     }
 
     protected Film(Parcel in) {
         long[] longData = new long[2];
-        String[] stringData = new String[2];
+        String[] stringData = new String[4];
         in.readLongArray(longData);
         in.readStringArray(stringData);
 
         id = longData[0];
-        releaseDate =longData[1];
+
         coverPath = stringData[0];
         title = stringData[1];
+        releaseDate =stringData[2];
+        backgroundImg =stringData[3];
         rating = in.readFloat();
     }
 
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLongArray(new long[]{id,releaseDate});
+        dest.writeLongArray(new long[]{id});
         dest.writeFloat(rating);
-        dest.writeStringArray(new String[] {this.coverPath ,this.title});
+        dest.writeStringArray(new String[]{this.coverPath, this.title,this.releaseDate,this.backgroundImg});
 
     }
 
@@ -55,11 +70,11 @@ public class Film implements Parcelable {
         }
     };
 
-    public long getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(long releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -93,6 +108,14 @@ public class Film implements Parcelable {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public void setBackgroundImg(String backgroundImg) {
+        this.backgroundImg = backgroundImg;
+    }
+
+    public String getBackgroundImg() {
+        return backgroundImg;
     }
 
     @Override
