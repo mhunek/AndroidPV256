@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.muni.fi.pv256.movio.uco393640.BuildConfig;
-import cz.muni.fi.pv256.movio.uco393640.DataSaver;
+import cz.muni.fi.pv256.movio.uco393640.utils.DataSaver;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
@@ -118,12 +118,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
     }
 
     private ArrayList<Film> getTestData() {
-        ArrayList<Film> films = new ArrayList<>(100);
-        for (int i =0; i < 100; i ++) {
-            Film f = new Film(i,Integer.toString(i+1000), "cover" + Integer.toString(i+500), "Title" + Integer.toString(i),i%5,"");
-            films.add(f);
-
-        }
+        ArrayList<Film> films = new ArrayList<>(0);
         return  films;
 
     }

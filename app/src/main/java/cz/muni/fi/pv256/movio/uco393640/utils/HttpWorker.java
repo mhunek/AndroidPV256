@@ -1,6 +1,5 @@
-package cz.muni.fi.pv256.movio.uco393640;
+package cz.muni.fi.pv256.movio.uco393640.utils;
 
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,8 +12,10 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Calendar;
 import java.util.List;
 
+import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
 /**
@@ -69,8 +70,10 @@ public class HttpWorker {
     }
 
     public List<Film> getFilms2(String apiKey) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
         OkHttpClient client =new OkHttpClient();
-        String d=  run(" https://api.themoviedb.org/3/discover/movie?primary_release_year=2015&sort_by=vote_average.desc&api_key="+  apiKey, client);
+        String d=  run(" https://api.themoviedb.org/3/discover/movie?primary_release_year="+year+"&sort_by=vote_average.desc&api_key="+  apiKey, client);
         JsonParser jsonParser = new JsonParser();
         JsonObject o = (JsonObject)jsonParser.parse(d);
         Type listType = new TypeToken<List<Film>>() {}.getType();

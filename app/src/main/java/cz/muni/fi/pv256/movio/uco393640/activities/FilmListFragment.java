@@ -1,13 +1,17 @@
 package cz.muni.fi.pv256.movio.uco393640.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
@@ -15,8 +19,10 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.muni.fi.pv256.movio.uco393640.DataSaver;
-import cz.muni.fi.pv256.movio.uco393640.HttpWorker;
+import cz.muni.fi.pv256.movio.uco393640.utils.DataSaver;
+import cz.muni.fi.pv256.movio.uco393640.utils.DownloadResultReceiver;
+import cz.muni.fi.pv256.movio.uco393640.utils.DownloadService;
+import cz.muni.fi.pv256.movio.uco393640.utils.HttpWorker;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
@@ -30,11 +36,11 @@ import cz.muni.fi.pv256.movio.uco393640.models.Film;
  * Use the {@link FilmListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FilmListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class FilmListFragment extends Fragment implements AdapterView.OnItemClickListener , DownloadResultReceiver.Receiver {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String FILM_LIST = "filmList";
-    private AsyncListViewLoader myTask;
+    private DownloadResultReceiver mReceiver;
 
     private FilmAdapter mAdapter;    // GridView adapter
     private ArrayList<Film> films;
@@ -59,9 +65,10 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
         if (getArguments() != null) {
             films = getArguments().getParcelableArrayList(FILM_LIST);
         }
-        myTask = new AsyncListViewLoader();
 
-        myTask.execute(getString(R.string.film_api_key));
+
+        startService();
+
     }
 
     @Override
@@ -71,7 +78,7 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
         View fragmentView = inflater.inflate(R.layout.fragment_film_list, container, false);
 
         mAdapter =new FilmAdapter(getActivity(), R.layout.film_list , films);
-        StickyGridHeadersGridView gridView = (StickyGridHeadersGridView) fragmentView.findViewById(android.R.id.list);
+        GridView gridView = (GridView) fragmentView.findViewById(android.R.id.list);
         gridView.setAdapter(mAdapter);
         gridView.setOnItemClickListener(this);
 
@@ -105,8 +112,47 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
         Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
+    private void startService() {
+         /* Starting Download Service */
+        mReceiver = new DownloadResultReceiver(new Handler());
+        mReceiver.setReceiver(this);
+        Intent intent = new Intent(getActivity().getBaseContext(), DownloadService.class);
+        intent.setAction(Intent.ACTION_SYNC);
+     //   intent = new Intent(Intent.ACTION_SYNC, null, this, DownloadService.class);
+        /* Send optional extras to Download IntentService */
 
+        intent.putExtra("receiver", mReceiver);
 
+        getActivity().startService(intent);
+    }
+
+    @Override
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        switch (resultCode) {
+            case DownloadService.STATUS_RUNNING:
+                Toast.makeText(getActivity().getBaseContext(), "running", Toast.LENGTH_LONG).show();
+                //setProgressBarIndeterminateVisibility(true);
+                break;
+            case DownloadService.STATUS_FINISHED:
+                /* Hide progress & extract result from bundle */
+                //setProgressBarIndeterminateVisibility(false);
+                Toast.makeText(getActivity().getBaseContext(), "finished", Toast.LENGTH_LONG).show();
+                String[] results = resultData.getStringArray("result");
+                mAdapter.clear();
+                mAdapter.addAll(DataSaver.getData());
+                mAdapter.notifyDataSetChanged();
+                /* Update ListView with result */
+                //arrayAdapter = new ArrayAdapter(MyActivity.this, android.R.layout.simple_list_item_2, results);
+               // listView.setAdapter(arrayAdapter);
+
+                break;
+            case DownloadService.STATUS_ERROR:
+                /* Handle the error */
+                String error = resultData.getString(Intent.EXTRA_TEXT);
+                Toast.makeText(getActivity().getBaseContext(), error, Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
 
 
     /**
@@ -123,27 +169,4 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
         // TODO: Update argument type and name
         public void onFragmentInteraction(int index);
     }
-
-    private class AsyncListViewLoader extends AsyncTask<String, Void, Void> {
-        List<Film> group1;
-        List<Film> group2;
-
-        @Override
-        protected Void doInBackground(String... params) {
-            HttpWorker hw =new HttpWorker() ;
-            group1 = hw.getFilms(params[0]);
-            group2 =hw.getFilms2(params[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void nul) {
-            DataSaver.group1 = group1;
-            DataSaver.group2=group2;
-            if(mAdapter != null) {
-                mAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
 }

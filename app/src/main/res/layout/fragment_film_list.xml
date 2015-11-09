@@ -5,7 +5,7 @@
              tools:context="cz.muni.fi.pv256.movio.uco393640.activities.FilmListFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+    <GridView
         android:layout_below="@+id/textView1"
         android:id="@android:id/list"
         android:layout_width="fill_parent"
@@ -14,7 +14,7 @@
         android:numColumns="3"
         >
 
-    </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>
+    </GridView>
     <ViewStub
         android:id="@android:id/empty"
         android:layout_width="wrap_content"

@@ -8,11 +8,10 @@
         android:id="@+id/item_image"
         android:contentDescription="list_item_image"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
         android:background="@color/white"/>
 
     <RatingBar
@@ -25,7 +24,7 @@
     <TextView
         android:id="@+id/item_desc"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:textSize="20sp"
         android:paddingTop="5dp"/>
 
