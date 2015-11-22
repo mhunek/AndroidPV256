@@ -3,6 +3,7 @@ package cz.muni.fi.pv256.movio.uco393640.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
 /**
@@ -11,7 +12,8 @@ import cz.muni.fi.pv256.movio.uco393640.models.Film;
 public  class DataSaver {
 
     public static List<Film> group1 = new ArrayList<Film>();
-
+     public static  boolean favourite = false;
+    public static FilmAdapter adapter;
     public  static List<Film>  getData () {
 
         return  group1;

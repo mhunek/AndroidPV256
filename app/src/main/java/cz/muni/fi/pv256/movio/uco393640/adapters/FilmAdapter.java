@@ -43,7 +43,6 @@ public class FilmAdapter extends ArrayAdapter<Film>  {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.film_list, parent, false);
             ViewHolder holder = new ViewHolder();
-            holder.view = (TextView) convertView.findViewById(R.id.item_desc);
             holder.im_view = (ImageView) convertView.findViewById(R.id.item_image);
             holder.rating_bar= (RatingBar)convertView.findViewById(R.id.item_rating);
             convertView.setTag(holder);
@@ -58,16 +57,15 @@ public class FilmAdapter extends ArrayAdapter<Film>  {
         }
 
         ViewHolder holder = (ViewHolder) convertView.getTag();
-        if(DataSaver.getData().size() != 0) {
-            holder.view.setText(DataSaver.getData().get(position).getTitle());
 
-            Picasso.with(getContext())
-                    .load(getContext().getResources().getText(R.string.base_url) + "w300/" + DataSaver.getData().get(position).getBackgroundImg())
-                    .placeholder(R.mipmap.test_images) // optional
-                    .into(holder.im_view);
-            holder.rating_bar.setRating(DataSaver.getData().get(position).getRating());
-            // holder.im_view.setImageResource(R.mipmap.test_images);
-        }
+            if (getCount() != 0) {
+                Picasso.with(getContext())
+                        .load(getContext().getResources().getText(R.string.base_url) + "w300/" + getItem(position).getCoverPath())
+                        .placeholder(R.mipmap.test_images) // optional
+                        .into(holder.im_view);
+                holder.rating_bar.setRating(DataSaver.getData().get(position).getRating());
+                // holder.im_view.setImageResource(R.mipmap.test_images);
+            }
             return convertView;
     }
 

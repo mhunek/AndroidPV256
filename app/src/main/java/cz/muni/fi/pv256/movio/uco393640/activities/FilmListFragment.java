@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.muni.fi.pv256.movio.uco393640.db.FilmManager;
 import cz.muni.fi.pv256.movio.uco393640.utils.DataSaver;
 import cz.muni.fi.pv256.movio.uco393640.utils.DownloadResultReceiver;
 import cz.muni.fi.pv256.movio.uco393640.utils.DownloadService;
@@ -43,14 +46,16 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     private DownloadResultReceiver mReceiver;
 
     private FilmAdapter mAdapter;    // GridView adapter
-    private ArrayList<Film> films;
+    //private ArrayList<Film> films;
+    private FilmManager mManager;
+    private boolean favourite;
 
     private OnFragmentInteractionListener mListener;
 
     public static FilmListFragment newInstance(ArrayList<Film> films) {
         FilmListFragment fragment = new FilmListFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(FILM_LIST, films);
+       // args.putParcelableArrayList(FILM_LIST, films);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,13 +67,13 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            films = getArguments().getParcelableArrayList(FILM_LIST);
+        mManager = new FilmManager( getActivity().getApplicationContext());
+      //  if (getArguments() != null) {
+        //    films = getArguments().getParcelableArrayList(FILM_LIST);
+      //  }
+        if(!DataSaver.favourite) {
+            startService();
         }
-
-
-        startService();
-
     }
 
     @Override
@@ -77,11 +82,29 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_film_list, container, false);
 
-        mAdapter =new FilmAdapter(getActivity(), R.layout.film_list , films);
+        mAdapter =new FilmAdapter(getActivity(), R.layout.film_list , new ArrayList<Film>(0));
+        if(DataSaver.favourite) {
+            DataSaver.adapter = mAdapter;
+        }
         GridView gridView = (GridView) fragmentView.findViewById(android.R.id.list);
         gridView.setAdapter(mAdapter);
         gridView.setOnItemClickListener(this);
+        //mySwitch = (SwitchCompat) ((AppCompatActivity)getActivity()).getSupportActionBar().getCustomView().findViewById(R.id.myswitch);
+        gridView.setEmptyView(fragmentView.findViewById(R.id.empty));
+         if (DataSaver.favourite) {
+                mAdapter.clear();
+                List<Film>data = mManager.getFilms();
+                mAdapter.addAll(data);
+                mAdapter.notifyDataSetChanged();
+            } else {
 
+                mAdapter.clear();
+                mAdapter.addAll(DataSaver.getData());
+                mAdapter.notifyDataSetChanged();
+             if(DataSaver.getData().size() ==0) {
+                 startService();
+             }
+            }
         return fragmentView;
     }
 
@@ -99,6 +122,7 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onDetach() {
         super.onDetach();
+        DataSaver.adapter = null;
         mListener = null;
     }
 
@@ -106,10 +130,11 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
         // retrieve the GridView item
-        Film item = films.get(position);
+
+       // Film item = films.get(position);
         mListener.onFragmentInteraction(position);
         // do something
-        Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     private void startService() {
@@ -130,16 +155,20 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
             case DownloadService.STATUS_RUNNING:
-                Toast.makeText(getActivity().getBaseContext(), "running", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), "running", Toast.LENGTH_LONG).show();
                 //setProgressBarIndeterminateVisibility(true);
                 break;
             case DownloadService.STATUS_FINISHED:
                 /* Hide progress & extract result from bundle */
                 //setProgressBarIndeterminateVisibility(false);
-                Toast.makeText(getActivity().getBaseContext(), "finished", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), "finished", Toast.LENGTH_LONG).show();
                 String[] results = resultData.getStringArray("result");
                 mAdapter.clear();
-                mAdapter.addAll(DataSaver.getData());
+                if(DataSaver.favourite) {
+                   mAdapter.addAll(mManager.getFilms());
+               }else {
+                    mAdapter.addAll(DataSaver.getData());
+                }
                 mAdapter.notifyDataSetChanged();
                 /* Update ListView with result */
                 //arrayAdapter = new ArrayAdapter(MyActivity.this, android.R.layout.simple_list_item_2, results);
@@ -149,7 +178,7 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
             case DownloadService.STATUS_ERROR:
                 /* Handle the error */
                 String error = resultData.getString(Intent.EXTRA_TEXT);
-                Toast.makeText(getActivity().getBaseContext(), error, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), error, Toast.LENGTH_LONG).show();
                 break;
         }
     }

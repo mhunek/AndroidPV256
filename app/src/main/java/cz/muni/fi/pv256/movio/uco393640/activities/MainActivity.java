@@ -10,8 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -19,16 +24,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.muni.fi.pv256.movio.uco393640.BuildConfig;
+import cz.muni.fi.pv256.movio.uco393640.db.FilmManager;
 import cz.muni.fi.pv256.movio.uco393640.utils.DataSaver;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
 
-public class MainActivity extends FragmentActivity  implements FilmListFragment.OnFragmentInteractionListener, FilmDetailFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements FilmListFragment.OnFragmentInteractionListener, FilmDetailFragment.OnFragmentInteractionListener, CompoundButton.OnCheckedChangeListener{
 
     private FilmAdapter film_adapter;
-    private GridView gv;
+    private FilmManager mManager;
+    private Menu menu;
     private boolean isTablet = false;
+    private SwitchCompat switchCompat2 ;
     private List<Film> data = new ArrayList<Film>(50);
 
     @Override
@@ -75,6 +83,7 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
 
             }
         }
+        mManager = new FilmManager(getApplicationContext());
 
 
 
@@ -84,7 +93,26 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.myswitch);
+        switchCompat2 = (SwitchCompat) MenuItemCompat.getActionView(item);
+        switchCompat2.setOnCheckedChangeListener(this);
+        switchCompat2.setChecked(DataSaver.favourite);
+        this.menu = menu    ;
         return true;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        DataSaver.favourite = isChecked;
+        ChangeInterction();
+
+
+        MenuItem bedMenuItem = menu.findItem(R.id.itemDecs);
+        if (isChecked) {
+            bedMenuItem.setTitle(R.string.item_desc_true);
+        } else {
+            bedMenuItem.setTitle(R.string.item_desc_false);
+        }
     }
 
     @Override
@@ -122,13 +150,44 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
         return  films;
 
     }
+  public void ChangeInterction(){
+
+      if (isTablet) {
+          Fragment fragment2 = FilmListFragment.newInstance(getTestData());
+          FragmentManager fragmentManager = getSupportFragmentManager();
+          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+          // R.id.fragment_container je id nějaké ViewGroup, která existuje v aktuálním layoutu.
+          // Do ní bude fragment umístěn.
+          // pak tam bdude dle tabletu/mobilu
+           fragmentTransaction.replace(R.id.MultipleFirst, fragment2, "Tag2");
+          // Na konci nesmíme zapomenout transakci commitnout.
+          fragmentTransaction.commit();
+      }else {
+          Fragment fragment2 = FilmListFragment.newInstance(getTestData());
+          FragmentManager fragmentManager = getSupportFragmentManager();
+          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+          // R.id.fragment_container je id nějaké ViewGroup, která existuje v aktuálním layoutu.
+          // Do ní bude fragment umístěn.
+          // pak tam bdude dle tabletu/mobilu
+          fragmentTransaction.replace(R.id.OneFragment, fragment2, "Tag2");
+          // Na konci nesmíme zapomenout transakci commitnout.
+          fragmentTransaction.commit();
+      }
+  }
+
 
 
     @Override
     public void onFragmentInteraction(int index) {
 //for firts
         if (isTablet) {
-            Fragment fragment2 = FilmDetailFragment.newInstance(DataSaver.getData().get(index));
+            Fragment fragment2;
+            if(DataSaver.favourite){
+                fragment2 = FilmDetailFragment.newInstance(mManager.getFilms().get(index));
+            }else {
+                fragment2 = FilmDetailFragment.newInstance(DataSaver.getData().get(index));
+            }
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             // R.id.fragment_container je id nějaké ViewGroup, která existuje v aktuálním layoutu.
@@ -138,7 +197,12 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
             // Na konci nesmíme zapomenout transakci commitnout.
             fragmentTransaction.commit();
         }else {
-            Fragment fragment2 = FilmDetailFragment.newInstance(DataSaver.getData().get(index));
+            Fragment fragment2;
+            if(DataSaver.favourite){
+                fragment2 = FilmDetailFragment.newInstance(mManager.getFilms().get(index));
+            }else {
+                fragment2 = FilmDetailFragment.newInstance(DataSaver.getData().get(index));
+            }
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             // R.id.fragment_container je id nějaké ViewGroup, která existuje v aktuálním layoutu.
@@ -160,8 +224,5 @@ public class MainActivity extends FragmentActivity  implements FilmListFragment.
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-       // for secnond
-    }
+
 }

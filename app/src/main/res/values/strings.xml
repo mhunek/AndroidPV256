@@ -1,11 +1,13 @@
 <resources>
-    <string name="app_name">Androidprojekt393640</string>
+    <string name="app_name">393640</string>
     <string name="film_api_key">ba971a5e76768b31a89048af95e40ec4</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_film_detail">Film_detail</string>
     <string name="base_url">http://image.tmdb.org/t/p/</string>
+    <string name="item_desc_true">Favourite</string>
+    <string name="item_desc_false">Discover</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

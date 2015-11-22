@@ -3,8 +3,10 @@ package cz.muni.fi.pv256.movio.uco393640.activities;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,7 +15,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import cz.muni.fi.pv256.movio.uco393640.R;
+import cz.muni.fi.pv256.movio.uco393640.db.FilmManager;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
+import cz.muni.fi.pv256.movio.uco393640.utils.DataSaver;
 
 
 /**
@@ -31,9 +35,10 @@ public class FilmDetailFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private Film film;
+    private FilmManager manager;
 
     private OnFragmentInteractionListener mListener;
-
+    private FloatingActionButton mFloatingActionButton;
 
     // TODO: Rename and change types and number of parameters
     public static FilmDetailFragment newInstance(Film film) {
@@ -54,6 +59,22 @@ public class FilmDetailFragment extends Fragment {
         if (getArguments() != null) {
             film = getArguments().getParcelable(FILM_PARAM);
         }
+        manager = new FilmManager(getActivity().getApplicationContext());
+
+    }
+
+    private void ButtonChanger(){
+        if(film.getDbId() == 0) {
+            Film f2 = manager.getFilm(film.getId());
+            if (f2 != null) {
+                mFloatingActionButton.setImageResource(R.drawable.minus);
+                film = f2;
+            } else{
+                mFloatingActionButton.setImageResource(R.drawable.plus);
+        }
+        }else {
+            mFloatingActionButton.setImageResource(R.drawable.minus);
+        }
     }
 
     @Override
@@ -62,10 +83,33 @@ public class FilmDetailFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View frag = inflater.inflate(R.layout.fragment_film_detail, container, false);
-        if(film.getId()== -1) {
-//Eempty film def picture etc
-        }else {
-        }
+
+
+        mFloatingActionButton = (FloatingActionButton)frag.findViewById(R.id.fab);
+        ButtonChanger();
+
+        mFloatingActionButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    if(film.getDbId() != 0) {
+                        manager.deleteFilm(film);
+                        if(DataSaver.adapter != null) {
+                            DataSaver.adapter.remove(film);
+                            DataSaver.adapter.notifyDataSetChanged();
+                        }
+                        film.setDbId(0);
+                    }else {
+                        film.setDbId((int) manager.createFilm(film));
+                    }
+                    ButtonChanger();
+                    // Do what you want
+                    return true;
+                }
+                return true; // consume the event
+            }
+        });
+
 //film comes fil fragment iwth data
         ImageView backgroundIMg = (ImageView) frag.findViewById(R.id.imageViewBacgroundImg);
         ImageView imageDetail = (ImageView) frag.findViewById(R.id.imageViewImageDetail);
@@ -75,16 +119,13 @@ public class FilmDetailFragment extends Fragment {
                 .into(imageDetail);
         TextView mFirstNameHeader = (TextView) frag.findViewById(R.id.film_detail_text);
         mFirstNameHeader.setText(film.getTitle());
+        TextView releasedDate = (TextView) frag.findViewById(R.id.film_detail_releaseDate);
+        releasedDate.setText(film.getReleaseDate());
+        ButtonChanger();
         return frag;
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -110,6 +151,8 @@ public class FilmDetailFragment extends Fragment {
         // Save our own state now
         outState.putParcelable(FILM_PARAM, film);
     }
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -122,7 +165,7 @@ public class FilmDetailFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+
     }
 
 }

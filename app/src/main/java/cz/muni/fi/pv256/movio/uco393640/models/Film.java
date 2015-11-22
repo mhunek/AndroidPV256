@@ -8,6 +8,10 @@ import com.google.gson.annotations.SerializedName;
  * Created by mhunek on 12/10/2015.
  */
 public class Film implements Parcelable {
+
+
+
+    private int dbId;
     @SerializedName("release_date")
     private String releaseDate;
     @SerializedName("poster_path")
@@ -25,12 +29,29 @@ public class Film implements Parcelable {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Film film = (Film) o;
+
+        return id == film.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+
     public Film ( long id, String releaseDate, String coverPath ,String title, float rating,String backgroundImg)  {
         this.releaseDate = releaseDate;
         this.coverPath = coverPath;
         this.title = title;
         this.setId(id);
         this.setRating(rating);
+
         this.backgroundImg = backgroundImg;
     }
 
@@ -41,7 +62,7 @@ public class Film implements Parcelable {
         in.readStringArray(stringData);
 
         id = longData[0];
-
+        dbId = in.readInt();
         coverPath = stringData[0];
         title = stringData[1];
         releaseDate =stringData[2];
@@ -53,9 +74,18 @@ public class Film implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLongArray(new long[]{id});
+        dest.writeInt(dbId);
         dest.writeFloat(rating);
         dest.writeStringArray(new String[]{this.coverPath, this.title,this.releaseDate,this.backgroundImg});
 
+    }
+
+    public int getDbId() {
+        return dbId;
+    }
+
+    public void setDbId(int dbId) {
+        this.dbId = dbId;
     }
 
     public static final Creator<Film> CREATOR = new Creator<Film>() {
@@ -122,4 +152,6 @@ public class Film implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+
 }

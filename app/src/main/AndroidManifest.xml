@@ -22,6 +22,9 @@
             android:label="@string/title_activity_film_detail" >
         </activity>
 
+        <provider android:name="cz.muni.fi.pv256.movio.uco393640.db.FilmProvider" android:authorities="cz.muni.fi.pv256.movio.uco393640">
+        </provider>
+
         <!-- Declaring Service in Manifest -->
         <service
             android:name=".utils.DownloadService"
