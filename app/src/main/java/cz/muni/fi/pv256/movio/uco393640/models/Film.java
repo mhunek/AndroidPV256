@@ -154,4 +154,20 @@ public class Film implements Parcelable {
     }
 
 
+
+    public boolean deepEquals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Film film = (Film) o;
+
+        if (dbId != film.dbId) return false;
+        if (id != film.id) return false;
+        if (Float.compare(film.rating, rating) != 0) return false;
+        if (!releaseDate.equals(film.releaseDate)) return false;
+        if (!coverPath.equals(film.coverPath)) return false;
+        if (!title.equals(film.title)) return false;
+        return backgroundImg.equals(film.backgroundImg);
+
+    }
 }

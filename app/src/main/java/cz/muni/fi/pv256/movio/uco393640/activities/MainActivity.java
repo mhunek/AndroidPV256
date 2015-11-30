@@ -1,5 +1,8 @@
 package cz.muni.fi.pv256.movio.uco393640.activities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -25,6 +28,7 @@ import java.util.List;
 
 import cz.muni.fi.pv256.movio.uco393640.BuildConfig;
 import cz.muni.fi.pv256.movio.uco393640.db.FilmManager;
+import cz.muni.fi.pv256.movio.uco393640.synchro.SyncAdapter;
 import cz.muni.fi.pv256.movio.uco393640.utils.DataSaver;
 import cz.muni.fi.pv256.movio.uco393640.R;
 import cz.muni.fi.pv256.movio.uco393640.adapters.FilmAdapter;
@@ -38,6 +42,11 @@ public class MainActivity extends AppCompatActivity implements FilmListFragment.
     private boolean isTablet = false;
     private SwitchCompat switchCompat2 ;
     private List<Film> data = new ArrayList<Film>(50);
+    private     Account mAccount;
+    public static final int SYNC_INTERVAL = 60 * 60 * 24; //day
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +93,36 @@ public class MainActivity extends AppCompatActivity implements FilmListFragment.
             }
         }
         mManager = new FilmManager(getApplicationContext());
+      //  mAccount = CreateSyncAccount(this);
+
+        SyncAdapter s  =new SyncAdapter( this,true);
+        ContentResolver.addPeriodicSync(
+                CreateSyncAccount(getBaseContext()),
+                getApplicationContext().getString(R.string.contentAuthority),
+                Bundle.EMPTY,
+                SYNC_INTERVAL);
+
 
 
 
     }
+
+    public static Account CreateSyncAccount(Context context) {
+        // Create the account type and default account
+        Account newAccount = new Account(context.getString(
+                R.string.app_name),context.getString (R.string.accountType));
+        // Get an instance of the Android account manager
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(
+                        ACCOUNT_SERVICE);
+        /*
+         * Add the account and account type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         */
+        accountManager.addAccountExplicitly(newAccount, null, null);
+      return newAccount;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

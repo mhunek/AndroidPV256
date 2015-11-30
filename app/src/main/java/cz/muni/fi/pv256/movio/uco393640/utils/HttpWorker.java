@@ -83,4 +83,15 @@ public class HttpWorker {
 
     }
 
+    public Film getFilm(Film film, String apiKey){
+        OkHttpClient client =new OkHttpClient();
+        String d=  run("https://api.themoviedb.org/3/find/"+Long.toString(film.getId())+"?external_source=imdb_id&api_key="+  apiKey, client);
+        JsonParser jsonParser = new JsonParser();
+        JsonObject o = (JsonObject)jsonParser.parse(d);
+        Type listType = new TypeToken<List<Film>>() {}.getType();
+        List<Film> filmList = new Gson().fromJson(o.get("movie_results"), listType);
+        return filmList.get(0);
+    }
+
+
 }

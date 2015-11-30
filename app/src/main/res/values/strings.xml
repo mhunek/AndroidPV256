@@ -8,6 +8,8 @@
     <string name="base_url">http://image.tmdb.org/t/p/</string>
     <string name="item_desc_true">Favourite</string>
     <string name="item_desc_false">Discover</string>
+    <string name="contentAuthority" translatable="false">ContentProvider</string>
+    <string name="accountType" translatable="false">AccountAuthenticator</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
