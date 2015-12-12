@@ -2,6 +2,11 @@
       xmlns:tools="http://schemas.android.com/tools"
       xmlns:app ="http://schemas.android.com/apk/res-auto"
       tools:context="cz.muni.fi.pv256.movio.uco393640.activities.MainActivity">
+      <item android:id="@+id/sync"
+            app:showAsAction="always"
+            android:title="Sync"
+            android:icon="@android:drawable/btn_radio"
+      />
 
       <item android:id="@+id/itemDecs"
             android:title="Discover"

@@ -33,11 +33,11 @@
         <service
             android:name="cz.muni.fi.pv256.movio.uco393640.synchro.AuthenticatorService">
             <intent-filter>
-                <action android:name="cz.muni.fi.pv256.movio.uco393640.synchro.AccountAuthenticator"/>
-            </intent-filter>
-            <meta-data
-                android:name="cz.muni.fi.pv256.movio.uco393640.synchro.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+            <action android:name="android.accounts.AccountAuthenticator"/>
+        </intent-filter>
+         <meta-data
+             android:name="android.accounts.AccountAuthenticator"
+                 android:resource="@xml/authenticator" />
         </service>
 
 

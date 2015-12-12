@@ -17,6 +17,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements FilmListFragment.
     private boolean isTablet = false;
     private SwitchCompat switchCompat2 ;
     private List<Film> data = new ArrayList<Film>(50);
-    private     Account mAccount;
     public static final int SYNC_INTERVAL = 60 * 60 * 24; //day
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
@@ -93,35 +93,15 @@ public class MainActivity extends AppCompatActivity implements FilmListFragment.
             }
         }
         mManager = new FilmManager(getApplicationContext());
-      //  mAccount = CreateSyncAccount(this);
-
-        SyncAdapter s  =new SyncAdapter( this,true);
-        ContentResolver.addPeriodicSync(
-                CreateSyncAccount(getBaseContext()),
-                getApplicationContext().getString(R.string.contentAuthority),
-                Bundle.EMPTY,
-                SYNC_INTERVAL);
+       //mAccount = CreateSyncAccount(this);
 
 
 
+      SyncAdapter.initializeSyncAdapter(this);
 
     }
 
-    public static Account CreateSyncAccount(Context context) {
-        // Create the account type and default account
-        Account newAccount = new Account(context.getString(
-                R.string.app_name),context.getString (R.string.accountType));
-        // Get an instance of the Android account manager
-        AccountManager accountManager =
-                (AccountManager) context.getSystemService(
-                        ACCOUNT_SERVICE);
-        /*
-         * Add the account and account type, no password or user data
-         * If successful, return the Account object, otherwise report an error.
-         */
-        accountManager.addAccountExplicitly(newAccount, null, null);
-      return newAccount;
-    }
+
 
 
     @Override
@@ -129,10 +109,17 @@ public class MainActivity extends AppCompatActivity implements FilmListFragment.
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.myswitch);
+        this.menu = menu;
         switchCompat2 = (SwitchCompat) MenuItemCompat.getActionView(item);
         switchCompat2.setOnCheckedChangeListener(this);
         switchCompat2.setChecked(DataSaver.favourite);
-        this.menu = menu    ;
+
+        return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+       this.menu = menu;
         return true;
     }
 
@@ -155,14 +142,17 @@ public class MainActivity extends AppCompatActivity implements FilmListFragment.
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.sync:
+                Log.i("", "Sync start ");
+                SyncAdapter.syncImmediately(getApplicationContext());
+                return true;
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public static NetworkInfo getNetworkInfo(Context context){
@@ -209,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements FilmListFragment.
           fragmentTransaction.commit();
       }
   }
+
+
 
 
 

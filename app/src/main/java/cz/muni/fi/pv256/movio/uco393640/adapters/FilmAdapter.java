@@ -58,7 +58,7 @@ public class FilmAdapter extends ArrayAdapter<Film>  {
 
         ViewHolder holder = (ViewHolder) convertView.getTag();
 
-            if (getCount() != 0) {
+            if (DataSaver.getData().size() != 0) {
                 Picasso.with(getContext())
                         .load(getContext().getResources().getText(R.string.base_url) + "w300/" + getItem(position).getCoverPath())
                         .placeholder(R.mipmap.test_images) // optional

@@ -11,4 +11,6 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Zdraveni</string>
+    <string name="servie_error">Data nešla načíst zkontrolujte internetové připojení</string>
+    <string name="relase_date">den vydání</string>
 </resources>

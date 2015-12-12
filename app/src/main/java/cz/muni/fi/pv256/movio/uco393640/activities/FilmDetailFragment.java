@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -115,12 +116,13 @@ public class FilmDetailFragment extends Fragment {
         ImageView imageDetail = (ImageView) frag.findViewById(R.id.imageViewImageDetail);
         Picasso.with(getActivity().getApplicationContext()).load(getResources().getText(R.string.base_url) +"original/"+ film.getBackgroundImg()).placeholder(R.mipmap.test_images) // optional
                 .into(backgroundIMg);
-        Picasso.with(getActivity().getApplicationContext()).load(getResources().getText(R.string.base_url) +"original/"+ film.getCoverPath()).placeholder(R.mipmap.test_images) // optional
+        Picasso.with(getActivity().getApplicationContext()).load(getResources().getText(R.string.base_url) +"w300/"+ film.getCoverPath()).placeholder(R.mipmap.test_images) // optional
                 .into(imageDetail);
-        TextView mFirstNameHeader = (TextView) frag.findViewById(R.id.film_detail_text);
+        TextView mFirstNameHeader = (TextView) frag.findViewById(R.id.film_name);
         mFirstNameHeader.setText(film.getTitle());
-        TextView releasedDate = (TextView) frag.findViewById(R.id.film_detail_releaseDate);
-        releasedDate.setText(film.getReleaseDate());
+        TextView releasedDate = (TextView) frag.findViewById(R.id.film_detail_release_date);
+
+        releasedDate.setText( getActivity().getApplicationContext().getString(R.string.relase_date) + ": "+film.getReleaseDate());
         ButtonChanger();
         return frag;
 

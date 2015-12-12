@@ -161,7 +161,10 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
             case DownloadService.STATUS_FINISHED:
                 /* Hide progress & extract result from bundle */
                 //setProgressBarIndeterminateVisibility(false);
-                Toast.makeText(getActivity().getApplicationContext(), "finished", Toast.LENGTH_LONG).show();
+                if(getActivity() != null) {
+                    Toast.makeText(getActivity().getApplicationContext(), "finished", Toast.LENGTH_LONG).show();
+                }
+
                 String[] results = resultData.getStringArray("result");
                 mAdapter.clear();
                 if(DataSaver.favourite) {
@@ -177,7 +180,8 @@ public class FilmListFragment extends Fragment implements AdapterView.OnItemClic
                 break;
             case DownloadService.STATUS_ERROR:
                 /* Handle the error */
-                String error = resultData.getString(Intent.EXTRA_TEXT);
+
+                String error =  getActivity().getApplicationContext().getString(R.string.servie_error); //resultData.getString(Intent.EXTRA_TEXT);
                 Toast.makeText(getActivity().getApplicationContext(), error, Toast.LENGTH_LONG).show();
                 break;
         }
