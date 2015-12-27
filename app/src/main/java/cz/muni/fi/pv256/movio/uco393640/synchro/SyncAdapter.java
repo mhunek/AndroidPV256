@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -127,13 +128,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         List<Film> films= manger.getFilms();
         HttpWorker worker = new HttpWorker();
-
+    int counter = 0;
         for (Film f: films) {
             Film temp = worker.getFilm(f,getContext().getString(R.string.film_api_key));
             if(!temp.deepEquals(f)){
                temp.setDbId(f.getDbId());
                 manger.updateFilm(temp);
+                counter++;
             }
+
+        }
+        if (0 < counter) {
+            Toast toast = Toast.makeText(getContext(), "There were " + counter + " changes", Toast.LENGTH_LONG);
 
         }
     }

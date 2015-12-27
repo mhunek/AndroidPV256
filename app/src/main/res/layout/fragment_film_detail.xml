@@ -26,7 +26,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/imageViewBacgroundImg"
                 android:layout_gravity="center_vertical"
-                android:background="#454141ff"/>
+                android:background="#454141ff"
+                android:scaleType="fitXY"/>
 
 
 
