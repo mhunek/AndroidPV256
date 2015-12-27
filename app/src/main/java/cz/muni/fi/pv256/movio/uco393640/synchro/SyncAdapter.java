@@ -2,21 +2,28 @@ package cz.muni.fi.pv256.movio.uco393640.synchro;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
 
 import cz.muni.fi.pv256.movio.uco393640.R;
+import cz.muni.fi.pv256.movio.uco393640.activities.MainActivity;
 import cz.muni.fi.pv256.movio.uco393640.db.FilmManager;
 import cz.muni.fi.pv256.movio.uco393640.models.Film;
 import cz.muni.fi.pv256.movio.uco393640.utils.HttpWorker;
@@ -139,9 +146,38 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         }
         if (0 < counter) {
-            Toast toast = Toast.makeText(getContext(), "There were " + counter + " changes", Toast.LENGTH_LONG);
-
+            notifyUser(counter);
         }
+    }
+
+    private void notifyUser(int numberOfChanges) {
+        Context context = getContext();
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification myNotification = new Notification(R.drawable.plus,"Notification!", System.currentTimeMillis());
+
+
+
+        String notificationTitle = "Sync change";
+        String notificationText = "There was " + numberOfChanges + " film changes";
+        Intent myIntent = new Intent();
+
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                getContext(),
+                0,
+                new Intent(), // add this
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        myNotification.defaults |= Notification.DEFAULT_SOUND;
+        myNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        myNotification.setLatestEventInfo(context, notificationTitle,notificationText, contentIntent);
+        notificationManager.notify(1, myNotification);
+
+
+
+
     }
 
 }
